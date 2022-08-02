@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROCK-PAPER-SCISSORS-LIZARD-SPOCK</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="css/layout.css" />
+  </head>
+  <body>
+    <div class="window">
+      <div class="menu">
+        <button class="close"><span class="material-icons"> close </span></button>
+        <div class="pattern">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <button class="info">?</button>
+      </div>
+      <div class="rule">
+        <p>
+          Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard,
+          lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.
+        </p>
+      </div>
+      <div id="com">
+        <ul>
+          <li><img src="images/rock.svg" alt="" /></li>
+          <li><img src="images/paper.svg" alt="" /></li>
+          <li><img src="images/scissors.svg" alt="" /></li>
+          <li><img src="images/lizard.png" alt="" /></li>
+          <li><img src="images/spock.png" alt="" /></li>
+        </ul>
+      </div>
+      <div id="player">
+        <ul>
+          <li data-id="0"><img src="images/rock.svg" alt="" /></li>
+          <li data-id="1"><img src="images/paper.svg" alt="" /></li>
+          <li data-id="2"><img src="images/scissors.svg" alt="" /></li>
+          <li data-id="3"><img src="images/lizard.png" alt="" /></li>
+          <li data-id="4"><img src="images/spock.png" alt="" /></li>
+        </ul>
+      </div>
+      <div id="result">
+        <ul>
+          <!-- <li class="win">W</li>
+          <li class="lose">L</li>
+          <li class="draw">D</li> -->
+        </ul>
+      </div>
+      <div id="cover">
+        <ul>
+          <li></li>
+        </ul>
+        <button id="btnRestart">restart</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    const comItems = document.querySelectorAll("#com ul li");
+    const playerItems = document.querySelectorAll("#player ul li");
+    const result = document.querySelector("#result ul");
+    const cover = document.querySelector("#cover");
+    const coverResult = document.querySelector("#cover ul");
+    const btnRestart = document.querySelector("#btnRestart");
+    const info = document.querySelector(".info");
+    const rule = document.querySelector(".rule");
+    info.addEventListener("click", function () {
+      rule.classList.toggle("on");
+    });
+
+    let allStop = null;
+    let count = 0;
+    let random = 0;
+    const comChoice = function () {
+      random = Math.floor(Math.random() * 5);
+      comItems.forEach(function (item, i) {
+        item.style.display = "none";
+      });
+      comItems[random].style.display = "block";
+    };
+    let stop = setInterval(comChoice, 5000);
+    const restart = function () {
+      stop = setInterval(comChoice, 5000);
+      playerItems.forEach(function (item, i) {
+        item.classList.remove("not");
+      });
+    };
+    const blocking = function () {
+      playerItems.forEach(function (item, i) {
+        item.classList.add("not");
+      });
+    };
+    const playerChoice = function (e) {
+      const selected = parseInt(this.dataset.id);
+      if (selected === random) {
+        result.innerHTML += `<li class="draw">D</li>`;
+      } else if ((selected === 0 && random === 2) || (selected === 0 && random === 3)) {
+        result.innerHTML += `<li class="win">W</li>`;
+      } else if ((selected === 1 && random === 0) || (selected === 1 && random === 4)) {
+        result.innerHTML += `<li class="win">W</li>`;
+      } else if ((selected === 2 && random === 1) || (selected === 2 && random === 3)) {
+        result.innerHTML += `<li class="win">W</li>`;
+      } else if ((selected === 3 && random === 1) || (selected === 3 && random === 4)) {
+        result.innerHTML += `<li class="win">W</li>`;
+      } else if ((selected === 4 && random === 0) || (selected === 4 && random === 2)) {
+        result.innerHTML += `<li class="win">W</li>`;
+      } else {
+        result.innerHTML += `<li class="lose">L</li>`;
+      }
+      blocking();
+      clearInterval(stop);
+      allStop = setTimeout(restart, 500);
+      count++;
+      if (count >= 3) {
+        clearTimeout(allStop);
+        const win = document.querySelectorAll(".win");
+        if (win.length > 1) {
+          coverResult.innerHTML += `<img src="" alt="">
+          <li>Bazinga!</li>`;
+        } else {
+          coverResult.innerHTML += `<img src="" alt="">
+          <li>Try Again</li>`;
+        }
+        cover.classList.add("on");
+      }
+    };
+    const restartGame = function () {
+      cover.classList.remove("on");
+      result.innerHTML = "";
+      coverResult.innerHTML = "";
+      count = 0;
+      restart();
+    };
+    playerItems.forEach(function (item, i) {
+      item.addEventListener("click", playerChoice);
+    });
+    btnRestart.addEventListener("click", restartGame);
+  </script>
+</html>

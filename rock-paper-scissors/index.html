@@ -29,23 +29,29 @@
           lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.
         </p>
       </div>
-      <div id="com">
-        <ul>
-          <li><img src="images/rock.svg" alt="" /></li>
-          <li><img src="images/paper.svg" alt="" /></li>
-          <li><img src="images/scissors.svg" alt="" /></li>
-          <li><img src="images/lizard.png" alt="" /></li>
-          <li><img src="images/spock.png" alt="" /></li>
-        </ul>
-      </div>
-      <div id="player">
-        <ul>
-          <li data-id="0"><img src="images/rock.svg" alt="" /></li>
-          <li data-id="1"><img src="images/paper.svg" alt="" /></li>
-          <li data-id="2"><img src="images/scissors.svg" alt="" /></li>
-          <li data-id="3"><img src="images/lizard.png" alt="" /></li>
-          <li data-id="4"><img src="images/spock.png" alt="" /></li>
-        </ul>
+      <div class="container">
+        <div id="com">
+          <ul>
+            <li><img src="images/rock.png" alt="" /></li>
+            <li><img src="images/paper.png" alt="" /></li>
+            <li><img src="images/scissors.png" alt="" /></li>
+            <li><img src="images/lizard.png" alt="" /></li>
+            <li><img src="images/spock.png" alt="" /></li>
+          </ul>
+        </div>
+        <div id="player">
+          <ul>
+            <li data-id="0"><img src="images/rock.png" alt="" /></li>
+            <li data-id="1"><img src="images/paper.png" alt="" /></li>
+            <li data-id="2"><img src="images/scissors.png" alt="" /></li>
+            <li data-id="3"><img src="images/lizard.png" alt="" /></li>
+            <li data-id="4"><img src="images/spock.png" alt="" /></li>
+          </ul>
+        </div>
+        <div id="cover">
+          <ul></ul>
+          <button id="btnRestart">restart</button>
+        </div>
       </div>
       <div id="result">
         <ul>
@@ -53,12 +59,6 @@
           <li class="lose">L</li>
           <li class="draw">D</li> -->
         </ul>
-      </div>
-      <div id="cover">
-        <ul>
-          <li></li>
-        </ul>
-        <button id="btnRestart">restart</button>
       </div>
     </div>
   </body>
@@ -83,11 +83,11 @@
       comItems.forEach(function (item, i) {
         item.style.display = "none";
       });
-      comItems[random].style.display = "block";
+      comItems[random].style.display = "flex";
     };
-    let stop = setInterval(comChoice, 5000);
+    let stop = setInterval(comChoice, 100);
     const restart = function () {
-      stop = setInterval(comChoice, 5000);
+      stop = setInterval(comChoice, 100);
       playerItems.forEach(function (item, i) {
         item.classList.remove("not");
       });
@@ -116,17 +116,17 @@
       }
       blocking();
       clearInterval(stop);
-      allStop = setTimeout(restart, 500);
+      allStop = setTimeout(restart, 100);
       count++;
       if (count >= 3) {
         clearTimeout(allStop);
         const win = document.querySelectorAll(".win");
         if (win.length > 1) {
-          coverResult.innerHTML += `<img src="" alt="">
-          <li>Bazinga!</li>`;
+          cover.style.backgroundImage = "url('../images/sheldon-laugh.gif')";
+          coverResult.innerHTML += `<li>Bazinga!</li>`;
         } else {
-          coverResult.innerHTML += `<img src="" alt="">
-          <li>Try Again</li>`;
+          cover.style.backgroundImage = "url('./images/aw-leonard.gif')";
+          coverResult.innerHTML += `<li>Try Again</li>`;
         }
         cover.classList.add("on");
       }
